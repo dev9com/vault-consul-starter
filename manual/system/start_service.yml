@@ -1,0 +1,9 @@
+- name: Start service
+  hosts: "{{ groups }}"
+  vars:
+    - ansible_user: ec2-user
+  vars_files:
+    - ../../secrets.yml
+  become: yes
+  roles:
+    - role: start_service

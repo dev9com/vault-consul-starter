@@ -54,6 +54,10 @@ To run only one tag add `--tags=TAGNAME`.
 
 When running any of the above playbooks you must use either the  `--ask-vault-pass` or `--vault-password-file` command line options.  The first will prompt for the password, and the second will read a single line text file with the password, or output from a script that prints the password to standard out.
 
+## Vault needs to be started manually
+
+Run: ansible-playbook -i ec2.py manual/system/start_service.yml -e 'keypair=key.pair ansible_ssh_private_key_file=~/.ssh/mypem.pem' --extra-vars="groups=tag_Name_vault service_name=vault" -vvvv
+
 ## Decrypt the secrets.yml file
 
 The secrets.yml file stores passwords and other secure information.  Before running ansible you must
