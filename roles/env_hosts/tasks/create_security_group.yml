@@ -6,13 +6,19 @@
     region: "{{ region }}"
     rules:
       - proto: tcp
-        from_port: 22
-        to_port: 22
+        from_port: 0
+        to_port: 65535
         cidr_ip: 0.0.0.0/0
-      - proto: tcp
-        from_port: 8200
-        to_port: 8200
+      - proto: udp
+        from_port: 0
+        to_port: 65535
         cidr_ip: 0.0.0.0/0
     rules_egress:
-      - proto: all
+      - proto: tcp
+        from_port: 0
+        to_port: 65535
+        cidr_ip: 0.0.0.0/0
+      - proto: udp
+        from_port: 0
+        to_port: 65535
         cidr_ip: 0.0.0.0/0
