@@ -1,0 +1,14 @@
+[req]
+prompt = no
+distinguished_name = dn
+req_extensions = ext
+
+[dn]
+CN = {{ ansible_fqdn }}
+emailAddress = sean.bollin@dev9.com
+O = Dev9
+L = Kirkland
+C = US
+
+[ext]
+subjectAltName = {% for item in ssl_certs.subject_alt_names %}DNS:{{ item }}{% if not loop.last %},{% endif %}{% endfor %}

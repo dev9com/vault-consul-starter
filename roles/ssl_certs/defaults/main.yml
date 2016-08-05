@@ -1,0 +1,30 @@
+---
+ssl_certs_country: "US"
+ssl_certs_locality: "Seattle"
+ssl_certs_organization: "Dev9"
+ssl_certs_state: "Washigton"
+ssl_certs_common_name: "{{ ansible_fqdn }}"
+ssl_certs_days: "365"
+ssl_certs_fields: "/C={{ssl_certs_country}}/ST={{ssl_certs_state}}/L={{ssl_certs_locality}}/O={{ssl_certs_organization}}/CN={{ssl_certs_common_name}}"
+
+ssl_certs_patch: "/etc/ssl/{{ssl_certs_common_name}}"
+ssl_certs_path_owner: "root"
+ssl_certs_path_group: "root"
+ssl_certs_privkey_path: "{{ssl_certs_patch}}/{{ssl_certs_common_name}}.key"
+ssl_certs_cert_path: "{{ssl_certs_patch}}/{{ssl_certs_common_name}}.pem"
+ssl_certs_csr_path: "{{ssl_certs_patch}}/{{ssl_certs_common_name}}.csr"
+
+ssl_certs_local_privkey_path: '{{inventory_dir|default(playbook_dir)}}/files/ssl/{{ssl_certs_common_name}}.key'
+ssl_certs_local_cert_path: '{{inventory_dir|default(playbook_dir)}}/files/ssl/{{ssl_certs_common_name}}.pem'
+
+ssl_certs_generate_self_signed: true
+ssl_certs_key_size: "2048"
+
+ssl_local_sub_ca_cnf_path: "files/ssl/sub-ca.cnf"
+ssl_local_sub_ca_path: "files/ssl/sub-ca.crt"
+ssl_local_root_ca_path: "files/ssl/root-ca.crt"
+
+ssl_working_dir: "/etc/pki/tls"
+ssl_certs_chain_ca_path: "{{ ssl_working_dir }}/chain-ca.crt"
+ssl_certs_sub_ca_path: "{{ ssl_working_dir }}/sub-ca.crt"
+ssl_certs_root_ca_path: "{{ ssl_working_dir }}/root-ca.crt"
