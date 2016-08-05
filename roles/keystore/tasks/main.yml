@@ -1,0 +1,10 @@
+- name: "Ensures {{ keystore.install_dir }} dir exists"
+  file: "path={{ keystore.install_dir }} state=directory"
+
+- name: deploy keystore
+  copy:
+    src: "{{ keystore.base_path }}/{{ keystore.keystore }}"
+    dest: "{{ keystore.install_dir }}/{{ keystore.keystore }}"
+    mode: 0644
+    owner: "{{ keystore.user }}"
+    group: "{{ keystore.group }}"

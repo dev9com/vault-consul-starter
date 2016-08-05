@@ -1,0 +1,52 @@
+- file: "path={{ pki.install_dir }} state=directory mode=0755"
+- file: "path={{ pki.install_dir }}/root-ca state=directory mode=0755"
+- file: "path={{ pki.install_dir }}/root-ca/certs state=directory mode=0755"
+- file: "path={{ pki.install_dir }}/root-ca/db state=directory mode=0755"
+- file: "path={{ pki.install_dir }}/root-ca/private state=directory mode=0700"
+- file: "path={{ pki.install_dir }}/sub-ca state=directory mode=0755"
+- file: "path={{ pki.install_dir }}/sub-ca/certs state=directory mode=0755"
+- file: "path={{ pki.install_dir }}/sub-ca/db state=directory mode=0755"
+- file: "path={{ pki.install_dir }}/sub-ca/private state=directory mode=0700"
+
+- name: establish index for db
+  command: "touch {{ pki.install_dir }}/root-ca/db/index"
+
+- name: create random serial
+  shell: "openssl rand -hex 16 > {{ pki.install_dir }}/root-ca/db/serial"
+
+- name: conf template for root CA
+  template:
+    src: "root-ca.cnf.j2"
+    dest: "{{ pki.install_dir }}/root-ca/root-ca.cnf"
+    mode: 0644
+    
+- name: conf template for sub CA
+  template:
+    src: "sub-ca.cnf.j2"
+    dest: "{{ pki.install_dir }}/sub-ca/sub-ca.cnf"
+    mode: 0644
+    
+- name: create csr for root ca
+  shell: "openssl req -new -config {{ pki.install_dir }}/root-ca/root-ca.cnf -out {{ pki.install_dir }}/root-ca/root-ca.csr -keyout {{ pki.install_dir }}/root-ca/private/root-ca.key"
+    
+- name: self sign root ca
+  shell: "openssl ca -batch -selfsign -config {{ pki.install_dir }}/root-ca/root-ca.cnf -in {{ pki.install_dir }}/root-ca/root-ca.csr -out {{ pki.install_dir }}/root-ca/root-ca.crt -extensions ca_ext"
+  args:
+    chdir: "{{ pki.install_dir }}/root-ca" 
+    
+- name: create csr for sub ca
+  shell: "openssl req -new -config {{ pki.install_dir }}/sub-ca/sub-ca.cnf -out {{ pki.install_dir }}/sub-ca/sub-ca.csr -keyout {{ pki.install_dir }}/sub-ca/private/sub-ca.key"
+  
+- name: sign sub ca with root ca
+  shell: "openssl ca -batch -config {{ pki.install_dir }}/root-ca/root-ca.cnf -in {{ pki.install_dir }}/sub-ca/sub-ca.csr -out {{ pki.install_dir }}/sub-ca/sub-ca.crt -extensions sub_ca_ext"
+  args:
+    chdir: "{{ pki.install_dir }}/root-ca"
+    
+- name: make a copy of default jvm truststore
+  shell: "cp $JAVA_HOME/jre/lib/security/cacerts {{ pki.install_dir }}/{{ pki.generated_truststore_name }}"
+  when: pki.append_to_default_jvm_truststore == true
+  
+- name: generate truststore with the root cert
+  shell: "keytool -noprompt -storepass {{ pki.truststore_password }} -import -trustcacerts -file {{ pki.install_dir }}/root-ca/root-ca.crt -alias {{ pki.alias_for_truststore }} -keystore {{ pki.generated_truststore_name }}"
+  args:
+    chdir: "{{ pki.install_dir }}/"

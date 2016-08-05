@@ -1,0 +1,41 @@
+---
+- name: install haproxy
+  yum: name=haproxy state=present
+
+- name: configure haproxy
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
+  notify: reload haproxy
+
+# configure syslog to accept network log events
+- replace: dest=/etc/sysconfig/rsyslog regexp='(\s+)SYSLOGD_OPTIONS=""(\s+.*)?$' replace='\1SYSLOGD_OPTIONS="-r"\2' backup=no
+
+# configure local2 events to go to the /var/log/haproxy.log file
+- lineinfile: dest=/etc/sysconfig/rsyslog line="local2.*                       /var/log/haproxy.log"
+
+# configure syslog to accept network log events
+- replace: dest=/etc/rsyslog.conf regexp='^#\$ModLoad imudp$' replace='$ModLoad imudp' backup=no
+
+# configure syslog to accept network log events
+- replace: dest=/etc/rsyslog.conf regexp='^#\$UDPServerRun 514$' replace='$UDPServerRun 514' backup=no
+
+# configure syslog to only listen on 127.0.0.1
+- lineinfile: dest=/etc/rsyslog.conf line="$UDPServerAddress 127.0.0.1"
+
+# configure syslog to write to logfile
+- lineinfile: dest=/etc/rsyslog.d/haproxy.conf line="local2.*    /var/log/haproxy.log" create=yes
+
+- name: if port policy exists change it in SELinux
+  command: "semanage port -m -t http_port_t -p tcp {{ item.port }}"
+  ignore_errors: true
+  with_items: "{{ haproxy.ports_to_open }}"
+
+- name: allow non-standard port in SELinux
+  command: "semanage port --add --type http_port_t --proto tcp {{ item.port }}"
+  ignore_errors: true
+  with_items: "{{ haproxy.ports_to_open }}"
+  
+- name: restart rsyslog
+  service: name=rsyslog state=restarted
+
+- name: restart haproxy
+  service: name=haproxy state=restarted

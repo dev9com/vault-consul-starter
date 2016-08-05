@@ -1,0 +1,21 @@
+---
+ssl_certs:
+  subject_alt_names: 
+    - "{{ ansible_fqdn }}"
+    - "{{ service_endpoint.vault }}"
+
+filebeat:
+  prospector_conf: vault.yml
+  prospectors:
+    -
+      paths:
+        - /var/log/vault/vault_audit.log
+      type: log
+      document_type: json_log
+      fields:
+        -
+          name: type
+          value: vault
+        -
+          name: application
+          value: vault

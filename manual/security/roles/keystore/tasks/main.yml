@@ -1,0 +1,10 @@
+- name: create a keystore with given cert and private key
+  command: "openssl pkcs12 -export -passout pass:{{ item.value.store_pass }} -in {{ item.value.cert_path }} -inkey {{ item.value.private_key_path }} -name {{ item.value.alias }} -out {{ item.value.keystore_to_output_path }}"
+  with_dict: "{{ keystore }}"
+  
+- name: copy empty_keystore.jks before inserting into it
+  command: "cp manual/security/roles/keystore/files/empty_keystore.jks manual/security/roles/keystore/files/keystore.jks"
+  
+- name: create jks keystore for deployment
+  command: "keytool -noprompt -storepass {{ keystore_jks_password }} -srcstorepass {{ item.value.store_pass }} -v -importkeystore -srckeystore {{ item.value.keystore_to_output_path }} -srcstoretype PKCS12 -destkeystore manual/security/roles/keystore/files/keystore.jks -deststoretype JKS"
+  with_dict: "{{ keystore }}"

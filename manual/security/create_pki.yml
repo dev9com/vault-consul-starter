@@ -1,0 +1,14 @@
+# Creates a PKI for intranet use.  Includes a Root CA and Subordinate CA.  Server and client certificates are to be signed by the 
+# Subordinate CA.  It is the Root CA that is included in the generated java truststore.  Specify the install_dir to a location where you would
+# like the certificates and truststore to be created.  A good place is: ~/pki
+
+# Keep the Root information, especially the private key, offline.
+
+# A truststore will be generated in the install_dir named "rootca_truststore" that contains only the Root CA certificate.
+
+# While running the play you will be asked for passwords to protect the key and truststore.
+
+- hosts: 127.0.0.1
+  connection: local
+  roles:
+    - role: pki

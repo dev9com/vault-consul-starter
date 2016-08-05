@@ -1,0 +1,19 @@
+# setting append_to_default_jvm_truststore to true adds the subordinate CA onto the default truststore provided by the jdk (requires $JAVA_HOME to be set)
+# this is useful when you need to make ssl calls to public services
+# setting to false creates a subordinate CA only truststore
+
+---
+pki:
+  generated_truststore_name: root_ca_truststore
+  alias_for_truststore: pkirootca
+  truststore_password: changeit
+  append_to_default_jvm_truststore: true
+  install_dir: ~/pki
+  root_ca:
+    common_name: Root CA
+    country_name: US
+    organization_name: Dev9
+  sub_ca:
+    common_name: Sub CA
+    country_name: US
+    organization_name: Dev9

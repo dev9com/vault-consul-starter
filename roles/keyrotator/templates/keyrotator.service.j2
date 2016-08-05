@@ -1,0 +1,17 @@
+[Unit]
+Description=keyrotator
+After=syslog.target
+
+[Service]
+User=keyrotator
+ExecStart= \
+    /bin/java \
+    -Dlog4j.configurationFile={{ install_dir }}/log4j2.xml \
+    -Djavax.net.ssl.trustStore={{ install_dir }}/{{ truststore.base_truststore }} \
+    -Djavax.net.ssl.trustStorePassword={{ secrets.truststore_password }} \
+    -jar {{ install_dir }}/{{ application_file }} 60 https://{{ service_endpoint.vault }}/v1/ {{ secrets.vault.token }} secret key
+SuccessExitStatus=143
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

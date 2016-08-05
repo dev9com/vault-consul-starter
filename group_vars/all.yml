@@ -1,0 +1,8 @@
+rhel_72_ami: ami-4dbf9e7d
+region: us-west-2
+
+hosts:
+  haproxy:
+    instance: t2.medium
+    user: ec2-user
+    image: "{{ rhel_72_ami }}"

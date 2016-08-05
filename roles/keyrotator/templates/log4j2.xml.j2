@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <!-- Defines the format for log entries. -->
+    <Properties>
+        <property name="logEntryFormat">%-12date{YYYY-MM-dd HH:mm:ss.SSS} %highlight(%-5level) (%-60logger{60}) -> %msg%n</property>
+    </Properties>
+
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <!-- encoders are by default assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+            <PatternLayout>
+                <pattern>${logEntryFormat}</pattern>
+            </PatternLayout>
+        </Console>
+
+        <RollingFile name="FILE"
+                     fileName="{{ install_dir }}/{{ log_file }}.log"
+                     filePattern="{{ install_dir }}/{{ log_file }}-%d{yyyy-MM-dd}-%i.log.gz">
+            <!--<JSONEventLayoutV1/>-->
+            <PatternLayout>
+                <pattern>${logEntryFormat}</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="9"/>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+        <logger name="com.allclearid" LEVEL="DEBUG"/>
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FILE"/>
+        </root>
+    </Loggers>
+
+</configuration>

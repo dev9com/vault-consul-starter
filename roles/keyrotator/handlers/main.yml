@@ -1,0 +1,11 @@
+---
+
+- name: reload systemd
+  sudo: yes
+  command: systemctl daemon-reload
+
+- name: restart keyrotator services
+  service:
+    name: keyrotator
+    enabled: yes
+    state: restarted

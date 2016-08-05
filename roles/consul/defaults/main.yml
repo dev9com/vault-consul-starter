@@ -1,0 +1,34 @@
+---
+filebeat:
+  prospector_conf: consul.yml
+  prospectors:
+    -
+      paths:
+        - /var/log/consul
+      type: log
+      document_type: log
+      fields:
+        -
+          name: type
+          value: consul
+        -
+          name: application
+          value: consul
+
+consul_version: 0.6.3
+consul_archive: "consul_{{ consul_version }}_linux_amd64.zip"
+consul_download: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_archive }}"
+consul_download_username: ""
+consul_download_password: ""
+consul_download_folder: /tmp
+
+consul_home: /opt/consul
+consul_config_dir: /etc/consul.d
+consul_config_file: /etc/consul.conf
+consul_log_file: /var/log/consul
+consul_data_dir: "{{ consul_home }}/data"
+
+consul_user: consul
+consul_group: consul
+
+consul_systemd_template: "consul.systemd.j2"

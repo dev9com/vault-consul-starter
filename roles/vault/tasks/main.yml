@@ -1,0 +1,3 @@
+---
+- include: ../../common/tasks/java.yml
+- include: vault.yml

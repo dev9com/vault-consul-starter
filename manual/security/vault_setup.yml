@@ -1,0 +1,12 @@
+# Initialize vault.  Only needs to be done once.  Make sure to record the keys returned.
+- hosts: haproxy_vault
+  remote_user: ec2-user
+  become: yes
+  vars:
+    - ansible_ssh_user: "{{ hosts.vault.user }}"
+  roles:
+    - role: vault_setup
+    
+  vars_prompt:
+    - name: "key1"
+      prompt: "Enter authentication key"

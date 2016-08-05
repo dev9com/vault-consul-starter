@@ -1,0 +1,13 @@
+[Unit]
+Description=Consul Agent
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Environment="GOMAXPROCS=`nproc`"
+User={{ consul_user }}
+Group={{ consul_group }}
+ExecStart=/bin/sh -c '{{ consul_home }}/bin/consul agent -server -config-dir {{ consul_config_dir }} -config-file={{ consul_config_file }} >> {{ consul_log_file }} 2>&1'
+
+[Install]
+WantedBy=multi-user.target

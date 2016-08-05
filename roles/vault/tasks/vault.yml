@@ -1,0 +1,62 @@
+---
+  
+- name: Download vault
+  get_url: "url={{ nexus.address }}/service/local/repositories/thirdparty/content/com/allclearid/thirdparty/hashicorp/vault/0.40.0/vault-0.40.0.zip dest=/tmp validate_certs=no" 
+  tags: download
+  sudo: no
+  
+- name: Install zip
+  yum: name=unzip state=latest
+
+- name: Update EPEL repository for RHEL/CENTOS 7.x
+  yum: "name={{ latest_epel_repo }} state=installed"
+
+- name: Install libselinux-python
+  yum: "name=libselinux-python state=installed"
+  
+- name: Unarchive vault
+  unarchive: src=/tmp/vault-0.40.0.zip dest=/tmp copy=no
+
+- group: name=vault state=present
+
+- user: name=vault group=vault
+
+# Enable Vault Audit
+- name: Creates directory for storing vault audit log
+  file: path=/var/log/vault state=directory owner=vault group=vault
+
+- name: Move binary
+  command: mv /tmp/vault /usr/local/bin/vault
+  
+- name: Set permissions on Vault binary
+  command: chmod 750 /usr/local/bin/vault
+  
+- name: Set owner and group on Vault
+  command: chown vault:vault /usr/local/bin/vault
+
+- name: Creates directory storing vault config
+  file: path=/usr/local/etc/vault state=directory
+  
+- name: Creates directory for storing vault data
+  file: path=/var/lib/vault state=directory owner=vault group=vault
+
+- name: copy file 
+  template:
+    src: vault.config.hcl.j2
+    dest: "/usr/local/etc/vault/vault.config.hcl"
+    mode: 0640
+    owner: vault
+    group: vault
+    
+- name: Give mlock permissions
+  shell: sudo setcap cap_ipc_lock=+ep $(readlink -f /usr/local/bin/vault)
+
+- name: systemd service
+  template:
+    src: vault.service.j2
+    dest: "/etc/systemd/system/vault.service"
+    mode: 0750
+    owner: vault
+    group: vault
+  notify:
+      - reload systemd

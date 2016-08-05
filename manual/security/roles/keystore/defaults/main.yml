@@ -1,0 +1,2 @@
+keystore_jks_output: ~/vault-consul-starter/files/ssl/keystore.jks
+keystore_jks_password: "{{ secrets.keystore_jks_password }}"

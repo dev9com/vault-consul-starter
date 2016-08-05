@@ -1,0 +1,11 @@
+---
+galaxy_info:
+  author: Sean Bollin
+  description: Quick keystore generator (from private key and certificate).
+  company: Dev9
+  min_ansible_version: 1.9
+  galaxy_tags:
+    - ssl
+    - tls
+    - keystore
+    - pki

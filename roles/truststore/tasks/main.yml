@@ -1,0 +1,26 @@
+- name: make copy of root ca truststore
+  become: false
+  run_once: true
+  local_action: >
+    shell cp {{ truststore.base_path }}/{{ truststore.base_truststore }} {{ truststore.base_path }}/{{ truststore.base_truststore }}.tmp
+
+- name: add additional certs to base truststore
+  become: false
+  run_once: true
+  local_action: >
+    shell keytool -noprompt -storepass {{ truststore.truststore_password }} -import -trustcacerts -file {{ item }} -alias {{ item }} -keystore {{ truststore.base_path }}/{{ truststore.base_truststore }}.tmp
+  with_items: truststore.additional_certs
+
+- name: deploy truststore
+  copy:
+    src: "{{ truststore.base_path }}/{{ truststore.base_truststore }}.tmp"
+    dest: "{{ truststore.install_dir }}/{{ truststore.base_truststore }}"
+    mode: 0644
+    owner: "{{ truststore.user }}"
+    group: "{{ truststore.group }}"
+
+- name: make copy of root ca truststore
+  run_once: true
+  become: false
+  local_action: >
+    shell rm {{ truststore.base_path }}/{{ truststore.base_truststore }}.tmp

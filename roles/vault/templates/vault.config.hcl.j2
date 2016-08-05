@@ -1,0 +1,17 @@
+backend "consul" {
+  address = "127.0.0.1:8500"
+  path = "vault"
+  advertise_addr = "https://{{ ansible_fqdn }}:{{ vault.port }}"
+}
+
+listener "tcp" {
+ address = "{{ ansible_fqdn }}:{{ vault.port }}"
+ tls_cert_file = "{{ ssl_certs_cert_path }}"
+ tls_key_file = "{{ ssl_certs_privkey_path }}"
+}
+
+listener "tcp" {
+ address = "127.0.0.1:{{ vault.port }}"
+ tls_cert_file = "{{ ssl_certs_cert_path }}"
+ tls_key_file = "{{ ssl_certs_privkey_path }}"
+}

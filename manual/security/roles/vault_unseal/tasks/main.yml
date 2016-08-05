@@ -1,0 +1,12 @@
+- name: "Supply keys to unseal Vault"
+  local_action: >
+    shell curl -k -X PUT https://{{ item[1] }}:8200/v1/sys/unseal -d '{"key": "{{ item[0] }}"}'
+  register: json_response
+  with_nested:
+    - ["{{ key1 }}", "{{ key2 }}", "{{ key3 }}"]
+    - "{{ groups.vault }}"
+    
+- name: "Output response"
+  debug: var=json_response
+  
+# Populate with test key: curl -k -X POST -H "X-Vault-Token:<rootToken>" -d '{"value":"ASDJAFFHJASKFAHSJFKSAFJSFAKSJFHSA"}' https://54.200.139.167:8200/v1/secret/current_key
