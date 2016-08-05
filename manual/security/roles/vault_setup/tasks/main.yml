@@ -1,5 +1,5 @@
 - name: "Enable Vault Audit"
-  sudo: false
+  become: false
   local_action:
     module: uri
     validate_certs: no
@@ -15,7 +15,7 @@
   debug: var=json_response
   
 - name: "Mount Vault Transit Backend"
-  sudo: false
+  become: false
   local_action:
     module: uri
     validate_certs: no
@@ -31,7 +31,7 @@
   debug: var=json_response
   
 - name: "Create Vault Transit Key"
-  sudo: false
+  become: false
   local_action:
     module: uri
     validate_certs: no

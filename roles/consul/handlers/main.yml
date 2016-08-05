@@ -1,11 +1,11 @@
 ---
 - name: reload systemd
-  sudo: yes
+  become: yes
   command: systemctl daemon-reload
       
 - name: restart consul
   action: service name=consul state=restarted enabled=yes
 
 - name: reload consul config
-  sudo: yes
+  become: yes
   command: pkill -1 consul
