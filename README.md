@@ -26,9 +26,9 @@ export AWS_SECRET_ACCESS_KEY="ghlfFhfdajkfFDAhfjkafEXAMPLE"
 
 Place this in the file ~/.aws/credentials
 
-[Credentials]
-aws_access_key_id = <your_access_key_here>
-aws_secret_access_key = <your_secret_key_here>
+[Credentials]  
+aws_access_key_id = <your_access_key_here>  
+aws_secret_access_key = <your_secret_key_here>  
 
 ## Add ec2.ini environment variable
 
