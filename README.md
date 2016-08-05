@@ -37,7 +37,7 @@ The ec2.py script needs a configuration file named ec2.ini
 Add this environment variable:
 
 ```bash
-export EC2_INI_PATH="~/directory>/ec2.ini"
+export EC2_INI_PATH="~/<directory>/ec2.ini"
 ```
 
 where ~/<directory> is the path to your ec2.ini
