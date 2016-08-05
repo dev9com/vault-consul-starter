@@ -30,7 +30,7 @@
    command: "openssl req -new -subj '{{ ssl_certs_fields }}' -key {{ ssl_certs_privkey_path }} -out {{ ssl_certs_csr_path }} -config {{ ssl_working_dir }}/gen_openssl.cnf"
 
  - name: Sign CSR with Subordinate CA
-   command: "openssl ca -batch -config {{ ssl_working_dir }}/sub-ca.cnf -extensions server_ext -notext -in {{ ssl_certs_csr_path }} -key {{ secrets.certs.sub_ca_private_key_pw }} -out {{ ssl_certs_cert_path }}"
+   command: "openssl ca -batch -config {{ ssl_working_dir }}/sub-ca.cnf -extensions server_ext -notext -in {{ ssl_certs_csr_path }} -key {{ secrets.certs.sub_ca_private_key_password }} -out {{ ssl_certs_cert_path }}"
      
  - name: Add subordinate CA cert to server cert
    shell: "cat {{ ssl_working_dir }}/sub-ca.crt >> {{ ssl_certs_cert_path }}"

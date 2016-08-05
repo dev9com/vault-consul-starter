@@ -1,7 +1,7 @@
 ---
   
 - name: Download vault
-  get_url: "url={{ nexus.address }}/service/local/repositories/thirdparty/content/com/allclearid/thirdparty/hashicorp/vault/0.40.0/vault-0.40.0.zip dest=/tmp validate_certs=no" 
+  get_url: "url=https://releases.hashicorp.com/vault/0.6.0/{{ vault.download_file }} dest=/tmp validate_certs=no" 
   tags: download
   become: no
   
@@ -15,7 +15,7 @@
   yum: "name=libselinux-python state=installed"
   
 - name: Unarchive vault
-  unarchive: src=/tmp/vault-0.40.0.zip dest=/tmp copy=no
+  unarchive: "src=/tmp/{{ vault.download_file }} dest=/tmp copy=no"
 
 - group: name=vault state=present
 

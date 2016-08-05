@@ -1,2 +1,5 @@
 ---
+
+- include: create_security_group.yml
 - include: haproxy_vault.yml
+- include: vault.yml

@@ -4,6 +4,7 @@
   ec2:
     keypair: "{{ keypair }}"
     instance_type: "{{ hosts.haproxy.instance }}"
+    group: "{{ security_group }}"
     image: "{{ hosts.haproxy.image }}"
     region: "{{ region }}"
     instance_tags:
@@ -19,10 +20,10 @@
 - name: Add haproxy instance to host group
   add_host:
     hostname: "{{ item.public_dns_name }}"
-    groupname: tag_Name_haproxy_vault,tag_haproxy_vault_host,tag_keyrotator_host
-  with_items: haproxy.instances
+    groupname: tag_Name_haproxy_vault,tag_haproxy_vault_host
+  with_items: "{{ haproxy.instances }}"
 
 - name: Wait for haproxy SSH to come up
   local_action: wait_for host={{ item.public_dns_name }}
                 port=22 delay=60 timeout=320 state=started
-  with_items: haproxy.instances
+  with_items: "{{ haproxy.instances }}"

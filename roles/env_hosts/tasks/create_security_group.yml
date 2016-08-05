@@ -1,0 +1,18 @@
+- name: Create a security group
+  local_action: 
+    module: ec2_group
+    name: "{{ security_group }}"
+    description: Security Group for Vault / Consul starter
+    region: "{{ region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 8200
+        to_port: 8200
+        cidr_ip: 0.0.0.0/0
+    rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0

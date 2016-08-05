@@ -1,8 +1,12 @@
 ---
+vault:
+  download_file: vault_0.6.0_linux_amd64.zip
+  port: 8200
+  
 ssl_certs:
   subject_alt_names: 
     - "{{ ansible_fqdn }}"
-    - "{{ service_endpoint.vault }}"
+    - "{{ hostvars[groups.tag_haproxy_vault_host[0]].ec2_private_ip_address }}"
 
 filebeat:
   prospector_conf: vault.yml

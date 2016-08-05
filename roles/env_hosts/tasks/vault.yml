@@ -1,0 +1,29 @@
+---
+
+- name: Launch vault instance
+  ec2:
+    keypair: "{{ keypair }}"
+    instance_type: "{{ hosts.vault.instance }}"
+    group: "{{ security_group }}"
+    image: "{{ hosts.vault.image }}"
+    region: "{{ region }}"
+    instance_tags:
+      Name: vault
+      vault: host
+      consul: host
+    exact_count: 3
+    count_tag:
+      Name: vault
+    wait: yes
+  register: vault
+
+- name: Add vault instance to host group
+  add_host:
+    hostname: "{{ item.public_dns_name }}"
+    groupname: tag_Name_vault,tag_vault_host,tag_consul_host
+  with_items: "{{ vault.instances }}"
+
+- name: Wait for vault SSH to come up
+  local_action: wait_for host={{ item.public_dns_name }}
+                port=22 delay=60 timeout=320 state=started
+  with_items: "{{ vault.instances }}"
