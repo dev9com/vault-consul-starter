@@ -50,6 +50,8 @@ To install Vault, Consul and HAProxy on AWS EC2 run:
     
 where FOO is the name of your [AWS keypair](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html).
 
+The first time you run this script it creates EC2 instances on AWS - sometimes there's an SSH glitch on the first run.  If you encounter this, just run the command again to see if it fixes it. (This is what I do).
+
 To run only one tag add `--tags=TAGNAME`.
 
 When running any of the above playbooks you must use either the  `--ask-vault-pass` or `--vault-password-file` command line options.  The first will prompt for the password, and the second will read a single line text file with the password, or output from a script that prints the password to standard out.
