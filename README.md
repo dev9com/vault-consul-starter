@@ -83,8 +83,3 @@ Password is: vault
 
 ansible.cfg is provided and host key checking is set to False
 
-## License
-
-GPLv3
-
-https://www.gnu.org/licenses/gpl-3.0.en.html
