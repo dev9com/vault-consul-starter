@@ -1,4 +1,4 @@
-# dev9-vault-consul
+# dev9 vault-consul-starter
 Ansible deploy of clustered Vault, Consul and HAProxy instance on AWS EC2
 
 ## Requirements
@@ -78,6 +78,10 @@ ansible-vault decrypt secrets.yml
 ```
 
 Password is: vault
+
+## Notes
+
+ansible.cfg is provided and host key checking is set to False
 
 ## License
 
