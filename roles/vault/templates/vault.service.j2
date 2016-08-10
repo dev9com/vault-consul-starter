@@ -6,6 +6,7 @@ After=syslog.target
 User=vault
 ExecStart=/usr/local/bin/vault server -config=/usr/local/etc/vault/vault.config.hcl
 SuccessExitStatus=143
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
