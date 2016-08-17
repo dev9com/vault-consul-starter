@@ -1,5 +1,5 @@
 # Initialize vault.  Only needs to be done once.  Make sure to record the keys returned.
-- hosts: haproxy_vault
+- hosts: tag_Name_vault
   remote_user: ec2-user
   become: yes
   vars:

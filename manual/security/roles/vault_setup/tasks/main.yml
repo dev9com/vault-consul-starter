@@ -7,9 +7,10 @@
     status_code: 204
     return_content: yes
     HEADER_X-Vault-Token: "{{ key1 }}"
-    url: https://{{ ec2_private_dns_name }}/v1/sys/audit/file
+    url: https://{{ ec2_dns_name }}:8200/v1/sys/audit/file
     body: '{"type": "file", "options": {"path": "/var/log/vault/vault_audit.log"}}'
   register: json_response
+  run_once: true
 
 - name: "Output response"
   debug: var=json_response
@@ -23,9 +24,10 @@
     status_code: 204
     return_content: yes
     HEADER_X-Vault-Token: "{{ key1 }}"
-    url: https://{{ ec2_private_dns_name }}/v1/sys/mounts/transit
+    url: https://{{ ec2_dns_name }}:8200/v1/sys/mounts/transit
     body: '{"type":"transit"}'
   register: json_response
+  run_once: true
 
 - name: "Output response"
   debug: var=json_response
@@ -39,8 +41,9 @@
     status_code: 204
     return_content: yes
     HEADER_X-Vault-Token: "{{ key1 }}"
-    url: https://{{ ec2_private_dns_name }}/v1/transit/keys/key
+    url: https://{{ ec2_dns_name }}:8200/v1/transit/keys/key
   register: json_response
+  run_once: true
 
 - name: "Output response"
   debug: var=json_response

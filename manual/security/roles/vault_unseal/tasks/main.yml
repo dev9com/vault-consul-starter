@@ -4,7 +4,7 @@
   register: json_response
   with_nested:
     - ["{{ key1 }}", "{{ key2 }}", "{{ key3 }}"]
-    - "{{ groups.vault }}"
+    - "{{ ec2_dns_name }}"
     
 - name: "Output response"
   debug: var=json_response

@@ -62,9 +62,27 @@ This creates a wide open security group on EC2 for initial ease of use.  Lock do
 
 ## Vault needs to be started manually
 
-Run: ansible-playbook -i ec2.py manual/system/start_service.yml -e 'keypair=key.pair ansible_ssh_private_key_file=~/.ssh/mypem.pem' --extra-vars="groups=tag_Name_vault service_name=vault" -vvvv
+Run: ansible-playbook -i ec2.py manual/system/start_service.yml -e 'keypair=FOO ansible_ssh_private_key_file=~/.ssh/FOO.pem' --extra-vars="groups=tag_Name_vault service_name=vault" -vvvv
 
 For troubleshooting, you can also use the restart_service.yml in the same way as the above start_service.yml
+
+## Initialize Vault
+
+Run: ansible-playbook -i ec2.py manual/security/vault_init.yml -e 'keypair=FOO ansible_ssh_private_key_file=~/.ssh/FOO.pem' -vvvv
+
+Record the output (contains critical passwords needed to operate Vault).  You need all 5 keys and the root key.
+
+## Unseal Vault
+
+Run: ansible-playbook -i ec2.py manual/security/vault_unseal.yml -e 'keypair=FOO ansible_ssh_private_key_file=~/.ssh/FOO.pem' -vvvv
+
+Provide 3 of the 5 keys saved in the "Initialze Vault" step.
+
+## (Optional) Setup Vault
+
+Run: ansible-playbook -i ec2.py manual/security/vault_setup.yml -e 'keypair=FOO ansible_ssh_private_key_file=~/.ssh/FOO.pem' -vvvv
+
+Installs different backends that you may or may not need.
 
 ## Check the HAProxy endpoint
 
@@ -84,8 +102,3 @@ Password is: vault
 ## Notes
 
 ansible.cfg is provided and host key checking is set to False
-
-## Known Issues
-
-Intermittently latest_epel_repo needs to be bumped up in version number
-
