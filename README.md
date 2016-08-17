@@ -88,6 +88,12 @@ Installs different backends that you may or may not need.
 
 http://amazonec2ipaddress:1936/
 
+login/password: haproxy/haproxy
+
+## Check Vault Seal Status (and other endpoints)
+
+curl -k -H "X-Vault-Token: YOUR_ROOT_VAULT_TOKEN" https://amazonec2HAPROXYipaddress/v1/sys/seal-status
+
 ## Decrypt the secrets.yml file
 
 The secrets.yml file stores passwords and other secure information.  Before running ansible you must
