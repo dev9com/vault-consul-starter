@@ -85,3 +85,7 @@ Password is: vault
 
 ansible.cfg is provided and host key checking is set to False
 
+## Known Issues
+
+Intermittently latest_epel_repo needs to be bumped up in version number
+
